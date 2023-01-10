@@ -39,5 +39,22 @@ public class Cliente {
 	}
 	
 	
+	private boolean comprobarLetraDni(String dni) {
+
+		char tempLetraDNI = dni.charAt(dni.length() - 1);
+		
+		String dniFixed = dni.replaceAll("\\D", "");
+		int dniNumber = Integer.parseInt(dniFixed);
+
+		char[] LETRAS_DNI = { 'T', 'R', 'W', 'A', 'G', 'M', 'Y', 'F', 'P', 'D', 'X', 'B', 'N', 'J', 'Z', 'S', 'Q', 'V',
+				'H', 'L', 'C', 'K', 'E' };
+
+		if (LETRAS_DNI[dniNumber % 23] == tempLetraDNI) {
+			return true;
+		} else
+			return false;
+	}
 	
+	
+
 }
