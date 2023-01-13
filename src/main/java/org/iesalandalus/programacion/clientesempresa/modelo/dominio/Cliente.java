@@ -1,20 +1,59 @@
 package org.iesalandalus.programacion.clientesempresa.modelo.dominio;
 
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.Date;
+import java.util.Objects;
 import java.util.StringTokenizer;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class Cliente {
 	
 	
-	private static final String ER_CORREO = "";
-	private static final String ER_DNI = "";
-	private static final String ER_TELEFONO = "";
-	public static final String FORMATO_FECHA = "";
+	private static final String ER_CORREO = "^[_A-Za-z0-9-\\+]+(\\.[_A-Za-z0-9-]+)*@"
+            + "[A-Za-z0-9-]+(\\.[A-Za-z0-9]+)*(\\.[A-Za-z]{2,})$";
+	
+	private static final String ER_DNI = "([0-9]{8})([a-zA-Z])";
+	
+	private static final String ER_TELEFONO = "(9|6)[0-9]{8}";
+	
+	public static final String FORMATO_FECHA = "dd/MM/yyyy HH:mm";
+	
 	private String nombre;
 	private String dni;
 	private String correo;
 	private String telefono;
-	private Date fechaNacimiento;
+	private LocalDate fechaNacimiento;
+	
+	
+	
+	
+	public Cliente(String nombre,String dni,String correo,String telefono,LocalDate fechaNacimiento) {
+		
+		
+		setNombre(nombre);
+		setDni(dni);
+		setCorreo(correo);
+		setTelefono(telefono);
+		setFechaNacimiento(fechaNacimiento); 	
+		
+	}
+	
+	
+	public Cliente(Cliente cliente) {
+		
+		if(cliente == null) {
+			
+			 throw new NullPointerException("ERROR: No es posible copiar un cliente nulo.");
+		}
+		
+		setNombre(cliente.getNombre());
+		setDni(cliente.getDni());
+		setCorreo(cliente.getCorreo());
+		setTelefono(cliente.getTelefono());
+		setFechaNacimiento(cliente.getFechaNacimiento());
+	}
 	
 	
 	
@@ -54,7 +93,149 @@ public class Cliente {
 		} else
 			return false;
 	}
+
+
+	public String getNombre() {
+		return this.nombre;
+	}
+
+
+	public void setNombre(String nombre) {
+		
+		if(nombre == null) {
+			
+             throw new NullPointerException("ERROR: El nombre de un cliente no puede ser nulo.");
+		}
+		
+		if(nombre.trim().isEmpty()) {
+			
+			throw new IllegalArgumentException("ERROR: El nombre de un cliente no puede estar vacío.");
+		}
+		
+		this.nombre = nombre; //formateaNombre(nombre)
+	}
+
+
+	public String getDni() {
+		return dni;
+	}
+
+
+	private void setDni(String dni) {
+		
+		if(dni == null) {
+			
+			 throw new NullPointerException("ERROR: El dni de un cliente no puede ser nulo.");
+		}
+		
+		if(!dni.matches(ER_DNI)) {
+			
+			throw new IllegalArgumentException("ERROR: El dni del cliente no tiene un formato válido.");
+		}
+		
+		if(comprobarLetraDni(dni) == false) {
+			
+			throw new IllegalArgumentException("ERROR: La letra del dni del cliente no es correcta.");
+		}
+		
+		
+		this.dni = dni;
+	}
+
+
+	public String getCorreo() {
+		return correo;
+	}
+
+
+	public void setCorreo(String correo) {
+		
+		if(correo == null) {
+			
+			 throw new NullPointerException("ERROR: El correo de un cliente no puede ser nulo.");
+		}
+		
+		Pattern pattern = Pattern.compile(ER_CORREO); 
+        Matcher mather = pattern.matcher(correo);
+        
+        if(mather.find() == false) {
+        	
+        	throw new IllegalArgumentException("ERROR: El correo del cliente no tiene un formato válido.");
+        }
+		
+		
+		this.correo = correo;
+	}
+
+
+	public String getTelefono() {
+		return telefono;
+	}
+
+
+	public void setTelefono(String telefono) {
+		
+		if(telefono == null) {
+			
+			 throw new NullPointerException("ERROR: El teléfono de un cliente no puede ser nulo.");
+		}
+		
+		if(!telefono.matches(ER_TELEFONO)) {
+			
+			throw new IllegalArgumentException("ERROR: El teléfono del cliente no tiene un formato válido.");
+		}
+		
+		
+		this.telefono = telefono;
+	}
+
+
+	public LocalDate getFechaNacimiento() {
+		return fechaNacimiento;
+	}
+
+
+	public void setFechaNacimiento(LocalDate fechaNacimiento) {
+		
+		if(fechaNacimiento == null) {
+			
+			 throw new NullPointerException("ERROR: La fecha de nacimiento de un cliente no puede ser nula.");
+		}
+		
+		this.fechaNacimiento = fechaNacimiento;
+	}
+
+
+	@Override
+	public int hashCode() {
+		return Objects.hash(dni);
+	}
+
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		Cliente other = (Cliente) obj;
+		return Objects.equals(dni, other.dni);
+	}
+	
+	private String getIniciales() {
+		StringBuilder iniciales = new StringBuilder();
+		for (String s : this.nombre.split(" ")) {iniciales.append(s.charAt(0));}
+		return iniciales.toString();
+
+	}
 	
 	
+	@Override
+	public String toString() {
+		return "nombre=" + nombre + " (" + getIniciales() + ")" + ", DNI=" + dni + ", correo=" + correo + ", teléfono="
+				+ telefono + ", fecha nacimiento=" + fechaNacimiento.format(DateTimeFormatter.ofPattern(FORMATO_FECHA));
+	}
 
 }
