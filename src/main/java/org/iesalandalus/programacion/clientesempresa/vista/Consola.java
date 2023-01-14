@@ -59,21 +59,23 @@ public class Consola {
 		System.out.print("Introduzca el dni del cliente: ");
 		String dni = Entrada.cadena();
 		
-		DateTimeFormatter dtf = DateTimeFormatter.ofPattern(Cliente.FORMATO_FECHA.replace(" HH:mm", ""));
-		
-		LocalDate fecha =   LocalDate.parse("29/07/2023", dtf);
-		
-		Cliente cliente = new Cliente("Juan",dni,"juan@gmail.com","633658895",fecha);
-		
-		return cliente;
+
+        DateTimeFormatter dtf = DateTimeFormatter.ofPattern(Cliente.FORMATO_FECHA.replace(" HH:mm", ""));
+
+        LocalDate fecha =   LocalDate.parse("29/07/2023", dtf);
+
+        Cliente cliente = new Cliente("Juan",dni,"juan@gmail.com","633658895",fecha);
+
+        return cliente;	
+
 	}
 	
 	
 	public static LocalDate  leerFechaNacimiento() {
 		
 		LocalDate fecha = null;
-		// Eliminamos la hora del patron FORMATO_FECHA_HORA con el método replace.
-		DateTimeFormatter dtf = DateTimeFormatter.ofPattern(Cliente.FORMATO_FECHA.replace(" HH:mm", ""));
+		// Eliminamos la hora del patron FORMATO_FECHA con el método replace.
+		DateTimeFormatter dtf = DateTimeFormatter.ofPattern(Cliente.FORMATO_FECHA);
 
 		System.out.printf("Introduza una fecha(dd/MM/yyyy):");
 		String fechaStr = Entrada.cadena();

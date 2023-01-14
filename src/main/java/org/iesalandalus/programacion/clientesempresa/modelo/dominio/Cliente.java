@@ -18,7 +18,7 @@ public class Cliente {
 	
 	private static final String ER_TELEFONO = "(9|6)[0-9]{8}";
 	
-	public static final String FORMATO_FECHA = "dd/MM/yyyy HH:mm";
+	public static final String FORMATO_FECHA = "dd/MM/yyyy";
 	
 	private String nombre;
 	private String dni;
@@ -242,7 +242,7 @@ public class Cliente {
 	
 	@Override
 	public String toString() {
-		return "(" + getIniciales() + ")" + ", DNI=" + dni + ", correo=" + correo + ", teléfono="
+		return  "nombre=" + nombre + " (" + getIniciales() + ")" + ", DNI=" + dni + ", correo=" + correo + ", teléfono="
 				+ telefono + ", fecha nacimiento=" + fechaNacimiento.format(DateTimeFormatter.ofPattern(FORMATO_FECHA));
 	}
 
