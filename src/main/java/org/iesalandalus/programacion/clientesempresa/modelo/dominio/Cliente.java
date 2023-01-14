@@ -56,26 +56,32 @@ public class Cliente {
 	}
 	
 	
-	
 	private String formateaNombre(String nombre) {
-		
+
+		// Paso 1 :Paso: Creamos un objeto del método StringTokenizer
 		StringTokenizer st = new StringTokenizer(nombre);
-		StringBuilder stringBuilder = new StringBuilder();
+		/*
+		 * Paso 2: Contamos la cantidad de palabras que tiene la variable que contenga
+		 * el texto y la guardamos en una variable entera.
+		 */
 
-		while (st.hasMoreElements()) {
+		int cantidadPalabras = st.countTokens();
+		// Paso 3: Creamos un ciclo for que corra por cada una de las palabras.
+		String nombreCompleto = " ";
+		for (int i = 0; i < cantidadPalabras; i++) {
+			String PalabraIndividual = st.nextToken();
+			/*
+			 * Nombre formateado (+=) primera letra de cada palabra en mayuscula, mas resto
+			 * de letras de cada palabra en miniscu
+			 */
 
-			String siguienteElemento = (String) st.nextElement();
-
-			if (siguienteElemento.length() > 0) {
-
-				stringBuilder.append(siguienteElemento.substring(0, 1).toUpperCase());
-				stringBuilder.append(siguienteElemento.substring(1).toLowerCase());
-				stringBuilder.append(' ');
-			}
+			nombreCompleto += PalabraIndividual.substring(0, 1).toUpperCase()
+					+ PalabraIndividual.substring(1).toLowerCase() + " ";
 		}
-
-		return stringBuilder.toString();
+		nombre = nombreCompleto.trim();
+		return nombre;
 	}
+	
 	
 	
 	private boolean comprobarLetraDni(String dni) {
@@ -112,7 +118,7 @@ public class Cliente {
 			throw new IllegalArgumentException("ERROR: El nombre de un cliente no puede estar vacío.");
 		}
 		
-		this.nombre = nombre; //formateaNombre(nombre)
+		this.nombre = formateaNombre(nombre);
 	}
 
 
@@ -223,10 +229,12 @@ public class Cliente {
 		Cliente other = (Cliente) obj;
 		return Objects.equals(dni, other.dni);
 	}
-	
+
 	private String getIniciales() {
 		StringBuilder iniciales = new StringBuilder();
-		for (String s : this.nombre.split(" ")) {iniciales.append(s.charAt(0));}
+		for (String s : this.nombre.split(" ")) {
+			iniciales.append(s.charAt(0));
+		}
 		return iniciales.toString();
 
 	}
@@ -234,7 +242,7 @@ public class Cliente {
 	
 	@Override
 	public String toString() {
-		return "nombre=" + nombre + " (" + getIniciales() + ")" + ", DNI=" + dni + ", correo=" + correo + ", teléfono="
+		return "(" + getIniciales() + ")" + ", DNI=" + dni + ", correo=" + correo + ", teléfono="
 				+ telefono + ", fecha nacimiento=" + fechaNacimiento.format(DateTimeFormatter.ofPattern(FORMATO_FECHA));
 	}
 
